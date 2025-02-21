@@ -18,11 +18,9 @@ jobs:
       - name: Installer les dépendances
         run: |
           python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt || pip install flask
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt || python -m pip install flask
 
       - name: Lancer les tests
-        run: |
-          source venv/bin/activate
-          python -m unittest discover tests
+        run: python -m unittest discover tests
 
