@@ -1,12 +1,9 @@
 name: CI/CD Flask
 
 on:
-
   push:
-
     branches:
-
-      - master
+      - main  # Exécuter le pipeline à chaque push sur main
 
 jobs:
   test:
@@ -14,19 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Récuperer le code
-        users: actions/checkout@v3
+      - name: Récupérer le code
+        uses: actions/checkout@v3
 
-      - name: Installer python
-        users: actions/setup-python@v4
+      - name: Installer Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
       - name: Installer les dépendances
-        run:  |
+        run: |
           python -m venv venv
-          source  venv/bin/activate
+          source venv/bin/activate
           pip install flask
 
-      - name: vérifier que Flask foncionne
-        run: python app.py  &
+      - name: Vérifier que Flask fonctionne
+        run: |
+          source venv/bin/activate
+          python app.py &
+          sleep 5
+          curl -f http://127.0.0.1:5000 || exit 1
+
